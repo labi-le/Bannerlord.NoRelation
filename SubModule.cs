@@ -1,58 +1,40 @@
-﻿using System.Reflection;
+﻿using System;
+using HarmonyLib;
 using TaleWorlds.Core;
-using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.GauntletUI;
 
-namespace Int19h.Bannerlord.NoRelation {
-    public class SubModule : MBSubModuleBase {
-        private static bool isActive = false;
-
-        private static void Print(string text, Color color) {
-            var message = new InformationMessage(text, color);
-            InformationManager.DisplayMessage(message);
+namespace labile.Bannerlord.NoRelation
+{
+    public class SubModule : MBSubModuleBase
+    {
+        protected override void OnSubModuleLoad()
+        {
+            base.OnSubModuleLoad();
+            try
+            {
+                new Harmony("labile.Bannerlord.NoRelation").PatchAll();
+            }
+            catch (Exception ex)
+            {
+                InformationManager.DisplayMessage(new InformationMessage("NoRelation Error: " + ex.Message, Colors.Red));
+            }
         }
+    }
 
-        private static void NotSupported(string reason) {
-            var version = typeof(InformationManager).Assembly.GetName().Version;
-            Print($"Unsupported game version {version}: {reason}", new Color(1, 0, 0));
-        }
-
-        protected override void OnBeforeInitialModuleScreenSetAsRoot() {
-            if (isActive) {
-                return;
+    [HarmonyPatch(typeof(GameNotificationVM), "AddGameNotification")]
+    public static class Patch_GameNotificationVM
+    {
+        public static bool Prefix(string notificationText, int extraTimeInMs, BasicCharacterObject announcerCharacter, Equipment equipment, string soundId)
+        {
+            if (!string.IsNullOrEmpty(soundId) && soundId.Contains("relation"))
+            {
+                InformationManager.DisplayMessage(new InformationMessage(notificationText, new Color(0.5f, 0.6f, 0.6f)));
+                return false; 
             }
 
-            var gnm = GauntletGameNotification.Current;
-            if (gnm is null) {
-                NotSupported("GauntletGameNotification.Current is null");
-                return;
-            }
-
-            var dataSourceField = gnm.GetType().GetField("_dataSource", BindingFlags.NonPublic | BindingFlags.Instance);
-            if (dataSourceField is null) {
-                NotSupported("GauntletGameNotification._dataSource is missing");
-                return;
-            }
-
-            var gnvm = dataSourceField.GetValue(gnm) as GameNotificationVM;
-            if (gnvm is null) {
-                NotSupported("GauntletGameNotification._dataSource has invalid type");
-                return;
-            }
-
-            MBInformationManager.FiringQuickInformation -= gnvm.AddGameNotification;
-            MBInformationManager.FiringQuickInformation += (string notificationText, int extraTimeInMs, BasicCharacterObject announcerCharacter, string soundId) => {
-                if (soundId == "event:/ui/notification/relation") {
-                    Print(notificationText, new Color(0.5f, 0.6f, 0.6f));
-                } else {
-                    gnvm.AddGameNotification(notificationText, extraTimeInMs, announcerCharacter, soundId);
-                }
-            };
-
-            isActive = true;
+            return true;
         }
     }
 }

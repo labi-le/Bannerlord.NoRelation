@@ -8,13 +8,14 @@
   <SingleplayerModule value="true" />
   <MultiplayerModule value="false" />
   <DependedModules>
-    <DependedModule Id="Native" DependentVersion="e1.8.0" />
+    <DependedModule Id="Native" DependentVersion="1.0.0.0" />
+    <DependedModule Id="Bannerlord.Harmony" DependentVersion="2.0.0.0" />
   </DependedModules>
   <SubModules>
     <SubModule>
       <Name value="NoRelation" />
-      <DLLName value="Int19h.Bannerlord.NoRelation.dll" />
-      <SubModuleClassType value="Int19h.Bannerlord.NoRelation.SubModule" />
+      <DLLName value="labile.Bannerlord.NoRelation.dll" />
+      <SubModuleClassType value="labile.Bannerlord.NoRelation.SubModule" />
       <Tags />
     </SubModule>
   </SubModules>

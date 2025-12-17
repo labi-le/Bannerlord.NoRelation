@@ -1,24 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <TargetFramework>net472</TargetFramework>
     <Platforms>x64</Platforms>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <ModuleName>$(MSBuildProjectName)</ModuleName>
     <GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>
-    <GameFolder Condition="'$(GameFolder)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord</GameFolder>
-    <AssemblyName>Int19h.Bannerlord.NoRelation</AssemblyName>
-    <RootNamespace>Int19h.Bannerlord.NoRelation</RootNamespace>
-    <Authors>Pavel Minaev</Authors>
-    <Company>Pavel Minaev</Company>
+    <GameFolder Condition="'$(GameFolder)' == ''">D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord</GameFolder>
+    
+    <AssemblyName>labile.Bannerlord.NoRelation</AssemblyName>
+    <RootNamespace>labile.Bannerlord.NoRelation</RootNamespace>
+    
+    <Authors>Pavel Minaev, labi-le</Authors>
     <Product>No Relation</Product>
-    <Copyright>Copyright © 2021-2022 Pavel "int19h" Minaev</Copyright>
-    <Description>https://github.com/int19h/Bannerlord.NoRelation</Description>
+    <Copyright>Copyright © 2021-2022 Pavel "int19h" Minaev, 2025 labi-le</Copyright>
+    
+    <Description>Prevents relation notifications from blocking the view. Fixed/Updated by labi-le. https://github.com/labi-le/Bannerlord.NoRelation</Description>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/int19h/Bannerlord.NoRelation</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/int19h/Bannerlord.NoRelation</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/labi-le/Bannerlord.NoRelation</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/labi-le/Bannerlord.NoRelation</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -60,6 +62,9 @@
     <PackageReference Include="Bannerlord.BuildResources" Version="1.0.0.33">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Lib.Harmony" Version="2.4.2">
+      <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
   </ItemGroup>
 
