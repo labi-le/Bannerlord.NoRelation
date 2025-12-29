@@ -1,22 +1,23 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Module>
-  <Name value="No Relation" />
-  <Id value="NoRelation" />
-  <Version value="v$version$" />
-  <Official value="false" />
-  <DefaultModule value="false" />
-  <SingleplayerModule value="true" />
-  <MultiplayerModule value="false" />
-  <DependedModules>
-    <DependedModule Id="Native" DependentVersion="1.0.0.0" />
-    <DependedModule Id="Bannerlord.Harmony" DependentVersion="2.0.0.0" />
-  </DependedModules>
-  <SubModules>
-    <SubModule>
-      <Name value="NoRelation" />
-      <DLLName value="labile.Bannerlord.NoRelation.dll" />
-      <SubModuleClassType value="labile.Bannerlord.NoRelation.SubModule" />
-      <Tags />
-    </SubModule>
-  </SubModules>
+    <Name value="No Relation"/>
+    <Id value="NoRelation"/>
+    <Version value="v$version$"/>
+    <Official value="false"/>
+    <DefaultModule value="false"/>
+    <SingleplayerModule value="true"/>
+    <MultiplayerModule value="false"/>
+    <DependedModules>
+        <DependedModule Id="Native" DependentVersion="1.0.0.0"/>
+        <DependedModule Id="Bannerlord.Harmony" DependentVersion="2.0.0.0"/>
+        <DependedModule Id="Bannerlord.MCM" DependentVersion="5.0.0.0"/>
+    </DependedModules>
+    <SubModules>
+        <SubModule>
+            <Name value="NoRelation"/>
+            <DLLName value="labile.Bannerlord.NoRelation.dll"/>
+            <SubModuleClassType value="labile.Bannerlord.NoRelation.SubModule"/>
+            <Tags/>
+        </SubModule>
+    </SubModules>
 </Module>

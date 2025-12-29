@@ -1,8 +1,11 @@
 ﻿using System;
 using HarmonyLib;
+using TaleWorlds.CampaignSystem.ViewModelCollection.Map;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
+using TaleWorlds.Engine;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 
 namespace labile.Bannerlord.NoRelation
@@ -18,23 +21,71 @@ namespace labile.Bannerlord.NoRelation
             }
             catch (Exception ex)
             {
-                InformationManager.DisplayMessage(new InformationMessage("NoRelation Error: " + ex.Message, Colors.Red));
+                InformationManager.DisplayMessage(
+                    new InformationMessage("NoRelation Error: " + ex.Message, Colors.Red)
+                );
             }
         }
     }
 
     [HarmonyPatch(typeof(GameNotificationVM), "AddGameNotification")]
-    public static class Patch_GameNotificationVM
+    public static class RelationNotification
     {
-        public static bool Prefix(string notificationText, int extraTimeInMs, BasicCharacterObject announcerCharacter, Equipment equipment, string soundId)
+        public static bool Prefix(string notificationText, string soundId)
         {
-            if (!string.IsNullOrEmpty(soundId) && soundId.Contains("relation"))
-            {
-                InformationManager.DisplayMessage(new InformationMessage(notificationText, new Color(0.5f, 0.6f, 0.6f)));
-                return false; 
-            }
+            if (!Settings.Current.DisableRelationNotifications) return true;
 
-            return true;
+            if (!soundId.Contains("relation")) return true;
+
+            InformationManager.DisplayMessage(new InformationMessage(notificationText, Settings.Current.GetLogColor()));
+
+            return false;
         }
     }
+
+    [HarmonyPatch(typeof(MBInformationManager), "AddQuickInformation")]
+    public static class Notifications
+    {
+        public static bool Prefix(TextObject message, string soundEventPath)
+        {
+            if (!Settings.Current.DisableAllNotifications) return true;
+            InformationManager.DisplayMessage(
+                new InformationMessage(message.ToString(), Settings.Current.GetLogColor()));
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(SoundEvent), "PlaySound2D", typeof(string))]
+    public static class NotificationsSound
+    {
+        public static bool Prefix(string soundName)
+        {
+            if (!Settings.Current.DisableNotificationSounds) return true;
+
+            return !soundName.Contains("event:/ui/notification");
+        }
+    }
+
+
+    // [HarmonyPatch(typeof(MapNotificationVM), "AddMapNotification")]
+    // public static class MapCircles
+    // {
+    //     public static bool Prefix(InformationData data)
+    //     {
+    //         {
+    //             var title = data.TitleText?.ToString() ?? "";
+    //             var desc = data.DescriptionText?.ToString() ?? "";
+    //
+    //             var logMessage = string.IsNullOrEmpty(desc) ? title : $"{title}: {desc}";
+    //
+    //             if (!string.IsNullOrWhiteSpace(logMessage))
+    //             {
+    //                 InformationManager.DisplayMessage(
+    //                     new InformationMessage(logMessage, Settings.Current.GetLogColor()));
+    //             }
+    //         }
+    //
+    //         return false;
+    //     }
+    // }
 }
